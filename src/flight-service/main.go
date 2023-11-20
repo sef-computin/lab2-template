@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"lab2/src/flight-service/dbhandler"
 	"lab2/src/flight-service/handlers"
 	"log"
 	"net/http"
@@ -27,7 +28,9 @@ func main() {
 		panic(err)
 	}
 
-	flightHandler := new(handlers.FlightHandler)
+	flightHandler := &handlers.FlightHandler{
+		DBHandler: *dbhandler.InitDBHandler(db),
+	}
 
 	router := gin.Default()
 

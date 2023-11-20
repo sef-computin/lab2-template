@@ -9,14 +9,14 @@ import (
 )
 
 type FlightHandler struct {
-	dbhandler dbhandler.DBHandler
+	DBHandler dbhandler.DBHandler
 }
 
 func (hand *FlightHandler) GetAirportHandler(c *gin.Context) {
 
 	airportID := c.Param("airportId")
 
-	airport, err := hand.dbhandler.GetAirportByID(airportID)
+	airport, err := hand.DBHandler.GetAirportByID(airportID)
 
 	if err != nil {
 		log.Printf("failed to get airport: %s", err)
@@ -29,7 +29,7 @@ func (hand *FlightHandler) GetAirportHandler(c *gin.Context) {
 
 func (hand *FlightHandler) GetAllFlightsHandler(c *gin.Context) {
 
-	flights, err := hand.dbhandler.GetAllFlights()
+	flights, err := hand.DBHandler.GetAllFlights()
 	if err != nil {
 		log.Printf("failed to get flghts: %s", err)
 		c.IndentedJSON(http.StatusInternalServerError, nil)
@@ -43,7 +43,7 @@ func (hand *FlightHandler) GetFlightHandler(c *gin.Context) {
 
 	flightID := c.Param("flightNumber")
 
-	flight, err := hand.dbhandler.GetFlightByNumber(flightID)
+	flight, err := hand.DBHandler.GetFlightByNumber(flightID)
 
 	if err != nil {
 		log.Printf("failed to get flight: %s", err)
