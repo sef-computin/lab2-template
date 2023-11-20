@@ -40,7 +40,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8060"
 	}
 
 	log.Println("Server is listening on port: ", port)
