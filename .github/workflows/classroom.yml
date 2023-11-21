@@ -7,36 +7,39 @@ on:
     branches:
       - master
 jobs:
+
   build:
-    name: Autograding
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - uses: docker/setup-buildx-action@v2
-
-      # TODO build and run unit tests
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Build images
         timeout-minutes: 10
         run: docker compose build
 
-      - name: Run containers
-        timeout-minutes: 5
-        run: |
-          docker compose up -d
-          ./scripts/wait-script.sh
-        env:
-          WAIT_PORTS: 8080,8070,8060,8050
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: docker-compose
+        run: | 
+          sudo docker-compose up -d --build
+          sleep 100
+
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
           # TODO insert your variant
-          collection: <variant>/postman/collection.json
-          environment: <variant>/postman/environment.json
+          collection: v1/postman/collection.json
+          environment: v1/postman/environment.json
           delayRequest: 100
           reporters: '[ "cli" ]'
 
