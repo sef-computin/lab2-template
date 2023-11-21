@@ -1,4 +1,4 @@
-// package handlers
+package handlers
 
 // import (
 // 	"bytes"
@@ -25,4 +25,3 @@
 // func TestGetAllFlights(t *testing.T) {
 
 // }
-	
