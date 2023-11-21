@@ -16,7 +16,7 @@ import (
 
 func main() {
 	dbURL := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-		"postgres", 5432, "program", "flights", "test")
+		"postgres", 5432, "postgres", "flights", "postgres")
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
