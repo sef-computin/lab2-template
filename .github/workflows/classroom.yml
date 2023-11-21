@@ -33,7 +33,6 @@ jobs:
           sudo docker-compose up -d --build
           sleep 100
 
-
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
