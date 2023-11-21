@@ -26,8 +26,11 @@ func CancelTicketController(ticketServiceAddress, bonusServiceAddress, username 
 	for _, privilege := range *privilegeInfo.History {
 		fmt.Println(privilege.TicketUID, ticketUID)
 		if privilege.TicketUID == ticketUID {
-
-			if err := UpdatePrivilege(bonusServiceAddress, username, privilegeInfo.Balance-privilege.BalanceDiff); err != nil {
+			newBalance := privilegeInfo.Balance - privilege.BalanceDiff
+			if newBalance < 0 {
+				newBalance = 0
+			}
+			if err := UpdatePrivilege(bonusServiceAddress, username, newBalance); err != nil {
 				return nil
 			}
 

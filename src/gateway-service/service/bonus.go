@@ -117,7 +117,6 @@ func CreatePrivilegeHistoryRecord(bonusServiceAddress, uid, date, optype string,
 	return nil
 }
 func UpdatePrivilege(bonusServiceAddress, username string, balance int) error {
-	fmt.Println("BBBBB")
 	requestURL := fmt.Sprintf("%s/api/v1/bonus/%s", bonusServiceAddress, username)
 	record := &models.Privilege{
 		Username: username,
