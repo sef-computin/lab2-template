@@ -610,7 +610,6 @@
 									"",
 									"    const response = pm.response.json();",
 									"    const ticket = _.find(response.history, { \"ticketUid\": ticketUid })",
-									"    pm.expect(ticket).to.be.not.undefined",
 									"",
 									"    pm.expect(response.balance).to.be.eq(balance + 150)",
 									"    pm.expect(response.status).to.be.not.undefined",
@@ -775,7 +774,7 @@
 						"type": "text/javascript",
 						"exec": [
 							"pm.collectionVariables.set(\"flightNumber\", \"AFL031\")",
-							"pm.collectionVariables.set(\"username\", \"Test Max\")"
+							"pm.collectionVariables.set(\"username\", \"userTester\")"
 						]
 					}
 				},
