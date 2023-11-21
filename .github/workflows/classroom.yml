@@ -19,14 +19,13 @@ jobs:
 
       # TODO build and run unit tests
 
-      - name: Build images
-        timeout-minutes: 10
-        run: docker compose build
-
+      # - name: Build images
+      #   timeout-minutes: 10
+      #   run: docker-compose build
       - name: Run containers
         timeout-minutes: 5
         run: |
-          docker compose up -d
+          docker-compose up -d
           ./scripts/wait-script.sh
         env:
           WAIT_PORTS: 8080,8070,8060,8050
