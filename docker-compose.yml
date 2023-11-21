@@ -83,15 +83,15 @@ services:
       - flight-service
       - bonus-service
     networks:
-      - reservation
-      - loyalty
-      - payment
+      - flight
+      - bonus
+      - ticket
 
 networks:
   db-local:
-  reservation:
-  loyalty:
-  payment:
+  flight:
+  bonus:
+  ticket:
 
 volumes:
   db-data:
