@@ -34,8 +34,10 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("api/v1/bonus/:username", bonusHandler.GetPrivilegeByUsernameHandler)
-	router.GET("api/v1/bonus/history/:privilegeId", bonusHandler.GetHistoryByIdHandler)
+	router.GET("/manage/health", bonusHandler.GetHealth)
+
+	router.GET("/api/v1/bonus/:username", bonusHandler.GetPrivilegeByUsernameHandler)
+	router.GET("/api/v1/bonus/history/:privilegeId", bonusHandler.GetHistoryByIdHandler)
 	router.POST("/api/v1/bonus", bonusHandler.CreatePrivilegeHistoryHandler)
 	router.POST("/api/v1/bonus/privilege", bonusHandler.CreatePrivilegeHandler)
 	router.POST("/api/v1/bonus/:username", bonusHandler.UpdatePrivilegeHandler)

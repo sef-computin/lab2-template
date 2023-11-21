@@ -53,3 +53,7 @@ func (hand *FlightHandler) GetFlightHandler(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, flight)
 }
+
+func (hand *FlightHandler) GetHealth(c *gin.Context) {
+	c.Status(http.StatusOK)
+}

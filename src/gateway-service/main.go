@@ -26,6 +26,8 @@ func main() {
 	router := gin.Default()
 	gs := handlers.NewGatewayService(&servicesConfig)
 
+	router.GET("/manage/health", gs.GetHealth)
+
 	router.GET("/api/v1/flights", gs.GetAllFlights)
 	router.GET("/api/v1/me", gs.GetUserInfo)
 	router.GET("/api/v1/tickets", gs.GetUserTickets)

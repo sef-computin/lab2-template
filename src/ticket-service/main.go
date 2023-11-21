@@ -34,8 +34,10 @@ func main() {
 
 	router := gin.Default()
 
+	router.GET("/manage/health", ticketHandler.GetHealth)
+
 	router.POST("/api/v1/tickets", ticketHandler.BuyTicketHandler)
-	router.GET("api/v1/tickets/:username", ticketHandler.GetTicketsByUsernameHandler)
+	router.GET("/api/v1/tickets/:username", ticketHandler.GetTicketsByUsernameHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

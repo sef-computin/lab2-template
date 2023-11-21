@@ -44,3 +44,7 @@ func (h *TicketHandler) BuyTicketHandler(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, nil)
 }
+
+func (h *TicketHandler) GetHealth(c *gin.Context) {
+	c.Status(http.StatusOK)
+}

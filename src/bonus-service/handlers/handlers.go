@@ -94,3 +94,7 @@ func (h *BonusHandler) GetHistoryByIdHandler(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, history)
 }
+
+func (h *BonusHandler) GetHealth(c *gin.Context) {
+	c.Status(http.StatusOK)
+}

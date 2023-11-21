@@ -248,3 +248,7 @@ func (gs *GatewayService) GetPrivilege(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, privilegeInfo)
 }
+
+func (gs *GatewayService) GetHealth(c *gin.Context) {
+	c.Status(http.StatusOK)
+}

@@ -34,9 +34,11 @@ func main() {
 
 	router := gin.Default()
 
+	router.GET("/manage/health", flightHandler.GetHealth)
+
 	router.GET("/api/v1/flights", flightHandler.GetAllFlightsHandler)
-	router.GET("api/v1/flight/:flightNumber", flightHandler.GetFlightHandler)
-	router.GET("api/v1/flight/airport/:airportId", flightHandler.GetAirportHandler)
+	router.GET("/api/v1/flight/:flightNumber", flightHandler.GetFlightHandler)
+	router.GET("/api/v1/flight/airport/:airportId", flightHandler.GetAirportHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
