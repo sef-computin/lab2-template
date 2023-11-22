@@ -12,7 +12,7 @@ import (
 )
 
 type BonusHandler struct {
-	DBHandler dbhandler.DBHandler
+	DBHandler dbhandler.BonusDB
 }
 
 func (h *BonusHandler) CreatePrivilegeHistoryHandler(c *gin.Context) {

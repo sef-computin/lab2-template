@@ -29,7 +29,7 @@ func main() {
 	}
 
 	bonusHandler := &handlers.BonusHandler{
-		DBHandler: *dbhandler.InitDBHandler(db),
+		DBHandler: dbhandler.InitDBHandler(db),
 	}
 
 	router := gin.Default()

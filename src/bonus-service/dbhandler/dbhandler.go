@@ -9,6 +9,14 @@ import (
 	"lab2/src/bonus-service/models"
 )
 
+type BonusDB interface {
+	GetPrvilegeByUsername(username string) (*models.Privilege, error)
+	GetHistoryById(ticketUID string) ([]*models.PrivilegeHistory, error)
+	CreateHistoryRecord(*models.PrivilegeHistory) error
+	CreatePrivilege(*models.Privilege) error
+	UpdatePrivilege(*models.Privilege) error
+}
+
 type DBHandler struct {
 	db *sql.DB
 }
