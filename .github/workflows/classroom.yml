@@ -29,9 +29,11 @@ jobs:
         env:
           WAIT_PORTS: 8080,8070,8060,8050
 
-      # - name: Run Unit Tests
-      #   run: |
-      #     cd src/bonus-service/handlers && go test && cd ../../..
+      - name: Run Unit Tests
+        run: |
+          cd src/bonus-service/handlers && go test && cd ../../..
+          cd src/flight-service/handlers && go test && cd ../../..
+          cd src/ticket-service/handlers && go test && cd ../../..
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master

@@ -1,9 +1,19 @@
 package handlers
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"lab2/src/bonus-service/dbhandler/mock_dbhandler"
+	"lab2/src/bonus-service/models"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 
 	_ "github.com/lib/pq"
 )
@@ -14,160 +24,226 @@ func SetUpRouter() *gin.Engine {
 }
 
 func TestCreatePrivilege(t *testing.T) {
-	// privilege := &models.Privilege{
-	// 	Username: "tuser1",
-	// 	Balance:  0,
-	// }
+	gin.SetMode(gin.ReleaseMode)
 
-	// jsonValue, _ := json.Marshal(privilege)
-	// req, _ := http.NewRequest("POST", "localhost:8050/api/v1/bonus/privilege", bytes.NewBuffer(jsonValue))
+	type mockBehaviour func(r *mock_dbhandler.MockBonusDB, record *models.Privilege)
+	tests := []struct {
+		name                 string
+		input                *models.Privilege
+		username             string
+		mockBehaviour        mockBehaviour
+		expectedStatusCode   int
+		expectedResponseBody string
+	}{
+		{
+			name:     "Ok",
+			username: "TestMax",
+			input: &models.Privilege{
+				Username: "TestMax",
+				Balance:  0,
+			},
 
-	// assert.Equal(t, http.StatusOK, req.Response.Status)
+			mockBehaviour: func(r *mock_dbhandler.MockBonusDB, input *models.Privilege) {
+				r.EXPECT().CreatePrivilege(input)
+			},
+			expectedStatusCode: http.StatusOK,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			privilege := &models.Privilege{
+				Username: test.username,
+				Balance:  0,
+			}
+
+			dbhandler := mock_dbhandler.NewMockBonusDB(c)
+			test.mockBehaviour(dbhandler, test.input)
+
+			handler := BonusHandler{DBHandler: dbhandler}
+
+			r := gin.New()
+			r.POST("/api/v1/bonus/privilege", handler.CreatePrivilegeHandler)
+
+			jsonValue, _ := json.Marshal(privilege)
+
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("POST", "/api/v1/bonus/privilege", bytes.NewBuffer(jsonValue))
+			req.Header.Set("X-User-Name", test.username)
+
+			r.ServeHTTP(w, req)
+
+			assert.Equal(t, w.Code, test.expectedStatusCode)
+		})
+	}
 }
 
 func TestUpdatePrivilege(t *testing.T) {
-	// dbURL := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-	// 	"postgres", 5432, "postgres", "privileges", "postgres")
+	gin.SetMode(gin.ReleaseMode)
 
-	// db, err := sql.Open("postgres", dbURL)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	type mockBehaviour func(r *mock_dbhandler.MockBonusDB, record *models.Privilege)
+	tests := []struct {
+		name                 string
+		input                *models.Privilege
+		username             string
+		mockBehaviour        mockBehaviour
+		expectedStatusCode   int
+		expectedResponseBody string
+	}{
+		{
+			name:     "Ok",
+			username: "TestMax",
+			input: &models.Privilege{
+				Username: "TestMax",
+				Balance:  0,
+			},
 
-	// err = db.Ping()
-	// if err != nil {
-	// 	panic(err)
-	// }
+			mockBehaviour: func(r *mock_dbhandler.MockBonusDB, input *models.Privilege) {
+				r.EXPECT().UpdatePrivilege(input)
+			},
+			expectedStatusCode: http.StatusOK,
+		},
+	}
 
-	// bh := &BonusHandler{
-	// 	DBHandler: *dbhandler.InitDBHandler(db),
-	// }
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
 
-	// privilege := &models.Privilege{
-	// 	Username: "tuser1",
-	// 	Balance:  0,
-	// }
+			privilege := &models.Privilege{
+				Username: test.username,
+				Balance:  0,
+			}
 
-	// r := SetUpRouter()
-	// r.POST("bonus/:username", bh.UpdatePrivilegeHandler)
+			dbhandler := mock_dbhandler.NewMockBonusDB(c)
+			test.mockBehaviour(dbhandler, test.input)
 
-	// jsonValue, _ := json.Marshal(privilege)
-	// req, _ := http.NewRequest("POST", "/bonus/tuser1", bytes.NewBuffer(jsonValue))
-	// w := httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
+			handler := BonusHandler{DBHandler: dbhandler}
 
-	// assert.Equal(t, http.StatusOK, w.Code)
+			r := gin.New()
+			r.POST("/api/v1/bonus/privilege", handler.UpdatePrivilegeHandler)
+
+			jsonValue, _ := json.Marshal(privilege)
+
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("POST", "/api/v1/bonus/privilege", bytes.NewBuffer(jsonValue))
+			req.Header.Set("X-User-Name", test.username)
+
+			r.ServeHTTP(w, req)
+
+			assert.Equal(t, w.Code, test.expectedStatusCode)
+		})
+	}
 }
 
 func TestGetPrivilegeByUsername(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 
-	// dbURL := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-	// 	"postgres", 5432, "postgres", "privileges", "postgres")
+	type mockBehaviour func(r *mock_dbhandler.MockBonusDB, username string, output *models.Privilege)
+	tests := []struct {
+		name                 string
+		input                models.Privilege
+		output               models.Privilege
+		username             string
+		mockBehaviour        mockBehaviour
+		expectedStatusCode   int
+		expectedResponseBody string
+	}{
+		{
+			name:     "Ok",
+			username: "TestMax",
+			input: models.Privilege{
+				Username: "TestMax",
+				Balance:  0,
+			},
 
-	// db, err := sql.Open("postgres", dbURL)
-	// if err != nil {
-	// 	panic(err)
-	// }
+			mockBehaviour: func(r *mock_dbhandler.MockBonusDB, username string, output *models.Privilege) {
+				r.EXPECT().GetPrvilegeByUsername(username).Return(output, nil)
+			},
+			expectedStatusCode: http.StatusOK,
+		},
+	}
 
-	// err = db.Ping()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
 
-	// bh := &BonusHandler{
-	// 	DBHandler: *dbhandler.InitDBHandler(db),
-	// }
+			var privilege models.Privilege
 
-	// r := SetUpRouter()
-	// r.GET("bonus/:username", bh.GetPrivilegeByUsernameHandler)
+			dbhandler := mock_dbhandler.NewMockBonusDB(c)
+			test.mockBehaviour(dbhandler, test.username, &privilege)
 
-	// req, _ := http.NewRequest("GET", "/bonus/tuser1", nil)
-	// w := httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
+			handler := BonusHandler{DBHandler: dbhandler}
 
-	// var privilege models.Privilege
-	// json.Unmarshal(w.Body.Bytes(), &privilege)
+			r := gin.New()
+			r.GET("/api/v1/bonus/:username", handler.GetPrivilegeByUsernameHandler)
 
-	// assert.Equal(t, http.StatusOK, w.Code)
-	// assert.NotEmpty(t, privilege)
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("GET", fmt.Sprintf("/api/v1/bonus/%v", test.username), nil)
+			req.Header.Set("X-User-Name", test.username)
 
-	// req, _ = http.NewRequest("GET", "/bonus/tuser99", nil)
-	// w = httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
-	// assert.Equal(t, http.StatusNotFound, w.Code)
-}
+			r.ServeHTTP(w, req)
 
-func TestCreatePrivilegeHistoryHandler(t *testing.T) {
-	// dbURL := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-	// 	"postgres", 5432, "postgres", "privileges", "postgres")
-
-	// db, err := sql.Open("postgres", dbURL)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// err = db.Ping()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// bh := &BonusHandler{
-	// 	DBHandler: *dbhandler.InitDBHandler(db),
-	// }
-
-	// record := &models.PrivilegeHistory{
-	// 	PrivilegeID:   555,
-	// 	TicketUID:     "tuid",
-	// 	Date:          "12.12.2012",
-	// 	BalanceDiff:   -150,
-	// 	OperationType: "FILL",
-	// }
-
-	// r := SetUpRouter()
-	// r.POST("/bonus", bh.CreatePrivilegeHistoryHandler)
-
-	// jsonValue, _ := json.Marshal(record)
-	// req, _ := http.NewRequest("POST", "/bonus", bytes.NewBuffer(jsonValue))
-	// w := httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
-
-	// assert.Equal(t, http.StatusOK, w.Code)
-
+			assert.Equal(t, w.Code, test.expectedStatusCode)
+		})
+	}
 }
 
 func TestGetHistoryById(t *testing.T) {
-	// dbURL := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-	// 	"postgres", 5432, "postgres", "privileges", "postgres")
+	gin.SetMode(gin.ReleaseMode)
 
-	// db, err := sql.Open("postgres", dbURL)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	type mockBehaviour func(r *mock_dbhandler.MockBonusDB, privilegeId string, output []*models.PrivilegeHistory)
+	tests := []struct {
+		name                 string
+		input                models.Privilege
+		output               models.PrivilegeHistory
+		privilegeId          string
+		username             string
+		mockBehaviour        mockBehaviour
+		expectedStatusCode   int
+		expectedResponseBody string
+	}{
+		{
+			name:        "Ok",
+			username:    "TestMax",
+			privilegeId: "1",
+			input: models.Privilege{
+				Username: "TestMax",
+				Balance:  0,
+			},
 
-	// err = db.Ping()
-	// if err != nil {
-	// 	panic(err)
-	// }
+			mockBehaviour: func(r *mock_dbhandler.MockBonusDB, privilegeId string, output []*models.PrivilegeHistory) {
+				r.EXPECT().GetHistoryById(privilegeId).Return(output, nil)
+			},
+			expectedStatusCode: http.StatusOK,
+		},
+	}
 
-	// bh := &BonusHandler{
-	// 	DBHandler: *dbhandler.InitDBHandler(db),
-	// }
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
 
-	// r := SetUpRouter()
-	// r.GET("bonus/history/:privilegeId", bh.GetPrivilegeByUsernameHandler)
+			var privilege_history []*models.PrivilegeHistory
+			dbhandler := mock_dbhandler.NewMockBonusDB(c)
+			test.mockBehaviour(dbhandler, test.privilegeId, privilege_history)
 
-	// req, _ := http.NewRequest("GET", "bonus/history/555", nil)
-	// w := httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
+			handler := BonusHandler{DBHandler: dbhandler}
 
-	// var privilege models.Privilege
-	// json.Unmarshal(w.Body.Bytes(), &privilege)
+			r := gin.New()
+			r.GET("/api/v1/bonus/:privilegeId", handler.GetHistoryByIdHandler)
 
-	// assert.Equal(t, http.StatusOK, w.Code)
-	// assert.NotEmpty(t, privilege)
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("GET", fmt.Sprintf("/api/v1/bonus/%v", test.privilegeId), nil)
+			req.Header.Set("X-User-Name", test.username)
 
-	// req, _ = http.NewRequest("GET", "bonus/history/999", nil)
-	// w = httptest.NewRecorder()
-	// r.ServeHTTP(w, req)
-	// assert.Equal(t, http.StatusNotFound, w.Code)
+			r.ServeHTTP(w, req)
+
+			assert.Equal(t, w.Code, test.expectedStatusCode)
+		})
+	}
 }
