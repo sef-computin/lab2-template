@@ -7,6 +7,12 @@ import (
 	"lab2/src/flight-service/models"
 )
 
+type FlightDB interface {
+	GetAllFlights() ([]*models.Flight, error)
+	GetFlightByNumber(flightNumber string) (*models.Flight, error)
+	GetAirportByID(airportID string) (*models.Airport, error)
+}
+
 type DBHandler struct {
 	db *sql.DB
 }

@@ -7,6 +7,11 @@ import (
 	"lab2/src/ticket-service/models"
 )
 
+type TicketDB interface {
+	GetTicketsByUsername(username string) ([]*models.Ticket, error)
+	CreateTicket(ticket *models.Ticket) error
+}
+
 type DBHandler struct {
 	db *sql.DB
 }

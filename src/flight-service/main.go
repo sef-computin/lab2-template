@@ -29,7 +29,7 @@ func main() {
 	}
 
 	flightHandler := &handlers.FlightHandler{
-		DBHandler: *dbhandler.InitDBHandler(db),
+		DBHandler: dbhandler.InitDBHandler(db),
 	}
 
 	router := gin.Default()

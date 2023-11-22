@@ -29,7 +29,7 @@ func main() {
 	}
 
 	ticketHandler := &handlers.TicketHandler{
-		DBHandler: *dbhandler.InitDBHandler(db),
+		DBHandler: dbhandler.InitDBHandler(db),
 	}
 
 	router := gin.Default()

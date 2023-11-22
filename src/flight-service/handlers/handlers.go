@@ -9,7 +9,7 @@ import (
 )
 
 type FlightHandler struct {
-	DBHandler dbhandler.DBHandler
+	DBHandler dbhandler.FlightDB
 }
 
 func (hand *FlightHandler) GetAirportHandler(c *gin.Context) {

@@ -12,7 +12,7 @@ import (
 )
 
 type TicketHandler struct {
-	DBHandler dbhandler.DBHandler
+	DBHandler dbhandler.TicketDB
 }
 
 func (h *TicketHandler) GetTicketsByUsernameHandler(c *gin.Context) {
